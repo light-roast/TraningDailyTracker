@@ -36,7 +36,7 @@ namespace TrainingDailyTracker.Controllers
 		{
 			var weeklyCycle = await _context.WeeklyCycle.FindAsync(1);
 			var number = weeklyCycle.WeekNumber + 1;
-			if(number < 5)
+			if(number < 6)
 			{
 				weeklyCycle.WeekNumber = number;
 			}
@@ -55,7 +55,7 @@ namespace TrainingDailyTracker.Controllers
 		{
 			var weeklyCycle = await _context.WeeklyCycle.FindAsync(1);
 			var number = weeklyCycle.WeekNumber - 1;
-			if (number > 1)
+			if (number > 0)
 			{
 				weeklyCycle.WeekNumber = number;
 			}

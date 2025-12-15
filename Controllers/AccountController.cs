@@ -1,0 +1,99 @@
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using TrainingDailyTracker.Data;
+using TrainingDailyTracker.Entities;
+
+namespace TrainingDailyTracker.Controllers
+{
+	[Route("api/[controller]")]
+	[ApiController]
+	public class AccountController : ControllerBase
+	{
+		private readonly IConfiguration _config;
+		private readonly DataContext _context;
+		private readonly ILogger<AccountController> _logger;
+
+
+
+		public AccountController(IConfiguration config, DataContext context, ILogger<AccountController> logger)
+		{
+			_config = config;
+			_context = context;
+			_logger = logger;
+		}
+
+		public class LoginModel
+		{
+			public string? Username { get; set; }
+			public string? Password { get; set; }
+		}
+
+		[HttpPost("Login")]
+		public IActionResult Login([FromBody] LoginModel model)
+		{
+			_logger.LogInformation("Login request");
+			if (model == null)
+			{
+				return BadRequest("Invalid request payload");
+			}
+			else
+			{
+				var user = Authenticate(model.Username, model.Password);
+				if (user is not null)
+				{
+					var token = GenerateJwt(user);
+					_logger.LogInformation("Login success");
+					return Ok(token);
+				}
+			}
+
+
+			_logger.LogInformation("Login failed");
+			return NotFound("User not found");
+		}
+
+
+		private User? Authenticate(string Username, string Password)
+		{
+			var currentUser = _context.User
+				.FirstOrDefault(user => user.Username.ToLower() == Username.ToLower()
+				   && user.Password == Password);
+
+			if (currentUser != null)
+			{
+				return currentUser;
+			}
+
+			return null;
+		}
+		private string GenerateJwt(User user)
+		{
+			var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+			var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+			// Crear los claims
+			var claims = new[]
+			{
+			 new Claim(ClaimTypes.NameIdentifier, user.Username ?? string.Empty),
+			 new Claim(ClaimTypes.Name, user.Name ?? string.Empty),
+		 };
+
+
+			// Crear el token
+
+			var token = new JwtSecurityToken(
+				_config["Jwt:Issuer"],
+				_config["Jwt:Audience"],
+				claims,
+				expires: DateTime.Now.AddMinutes(30),
+				signingCredentials: credentials);
+
+			return new JwtSecurityTokenHandler().WriteToken(token);
+		}
+
+	}
+}
