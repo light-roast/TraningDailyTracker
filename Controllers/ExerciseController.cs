@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TrainingDailyTracker.Data;
@@ -56,6 +57,7 @@ namespace TrainingDailyTracker.Controllers
 
 		// PUT: api/Exercise/5
 		[HttpPut("{id}")]
+		[Authorize]
 		public async Task<IActionResult> PutExercise(int id, Exercise exercise)
 		{
 			if (id != exercise.Id)
@@ -86,6 +88,7 @@ namespace TrainingDailyTracker.Controllers
 
 		// POST: api/Exercise
 		[HttpPost]
+		[Authorize]
 		public async Task<ActionResult<Exercise>> PostExercise(Exercise exercise)
 		{
 			_context.Exercise.Add(exercise);
@@ -96,6 +99,7 @@ namespace TrainingDailyTracker.Controllers
 
 		// DELETE: api/Exercise/5
 		[HttpDelete("{id}")]
+		[Authorize]
 		public async Task<IActionResult> DeleteExercise(int id)
 		{
 			var exercise = await _context.Exercise.FindAsync(id);
