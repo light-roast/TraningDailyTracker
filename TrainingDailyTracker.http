@@ -1,0 +1,6 @@
+@TrainingDailyTracker_HostAddress = http://localhost:5269
+
+GET {{TrainingDailyTracker_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
