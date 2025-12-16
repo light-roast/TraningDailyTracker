@@ -75,7 +75,6 @@ app.UseHttpsRedirection();
 
 app.UseCors(builder => builder
 	.WithOrigins(
-		"http://localhost:8000",
 		"https://light-roast.github.io" 
 	)
 	.AllowAnyMethod()
