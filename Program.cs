@@ -60,7 +60,7 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddDbContext<DataContext>(options =>
 	options.UseSqlite(connectionString));
 
-//builder.Services.AddCors();
+builder.Services.AddCors();
 
 var app = builder.Build();
 
@@ -73,10 +73,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-//app.UseCors(builder => builder
-//.WithOrigins("https://pairxpensesapp.azurewebsites.net/", "https://pairxpensesapp.azurewebsites.net")
-//	.AllowAnyMethod()
-//		.AllowAnyHeader());
+app.UseCors(builder => builder
+.WithOrigins("http://localhost:8000/", "https://light-roast.github.io/TraningDailyTrackerFront/")
+	.AllowAnyMethod()
+		.AllowAnyHeader());
 
 app.UseAuthentication();
 app.UseAuthorization();
