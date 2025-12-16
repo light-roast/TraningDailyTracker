@@ -74,7 +74,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseCors(builder => builder
-.WithOrigins("http://localhost:8000/", "https://light-roast.github.io/TraningDailyTrackerFront/")
+.WithOrigins("http://localhost:8000/", "https://light-roast.github.io/TraningDailyTrackerFront/", "https://light-roast.github.io/TraningDailyTrackerFront")
 	.AllowAnyMethod()
 		.AllowAnyHeader());
 
