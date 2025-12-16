@@ -5,15 +5,13 @@ namespace TrainingDailyTracker.Data
 {
 	public class DataContext : DbContext
 	{
+		public DataContext(DbContextOptions<DataContext> options) : base(options)
+		{
+		}
+
 		public DbSet<Exercise> Exercise { get; set; } = null!;
 		public DbSet<WeeklyCycle> WeeklyCycle { get; set; } = null!;
 		public DbSet<User> User { get; set; } = null!;
-
-		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-		{
-			if (!optionsBuilder.IsConfigured)
-				optionsBuilder.UseSqlite("Data Source=Database.db");
-		}
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{

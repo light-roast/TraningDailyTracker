@@ -46,6 +46,7 @@ namespace TrainingDailyTracker.Controllers
 			}
 				
 			_context.Entry(weeklyCycle).State = EntityState.Modified;
+			await _context.SaveChangesAsync();
 
 			return NoContent();
 		}
@@ -65,6 +66,7 @@ namespace TrainingDailyTracker.Controllers
 			}
 
 			_context.Entry(weeklyCycle).State = EntityState.Modified;
+			await _context.SaveChangesAsync();
 
 			return NoContent();
 		}
