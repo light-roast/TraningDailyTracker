@@ -35,8 +35,15 @@ namespace TrainingDailyTracker.Controllers
 		public async Task<IActionResult> NextWeeklyCycle()
 		{
 			var weeklyCycle = await _context.WeeklyCycle.FindAsync(1);
+			if (weeklyCycle == null)
+			{
+				return NotFound();
+			}
+
+			var maxWeekNumber = await _context.WeeklySchedule.MaxAsync(ws => ws.WeekNumber);
 			var number = weeklyCycle.WeekNumber + 1;
-			if(number < 11)
+			
+			if (number <= maxWeekNumber)
 			{
 				weeklyCycle.WeekNumber = number;
 			}
@@ -55,14 +62,21 @@ namespace TrainingDailyTracker.Controllers
 		public async Task<IActionResult> PreviousWeeklyCycle()
 		{
 			var weeklyCycle = await _context.WeeklyCycle.FindAsync(1);
+			if (weeklyCycle == null)
+			{
+				return NotFound();
+			}
+
+			var maxWeekNumber = await _context.WeeklySchedule.MaxAsync(ws => ws.WeekNumber);
 			var number = weeklyCycle.WeekNumber - 1;
+			
 			if (number > 0)
 			{
 				weeklyCycle.WeekNumber = number;
 			}
 			else
 			{
-				weeklyCycle.WeekNumber = 5;
+				weeklyCycle.WeekNumber = maxWeekNumber;
 			}
 
 			_context.Entry(weeklyCycle).State = EntityState.Modified;
