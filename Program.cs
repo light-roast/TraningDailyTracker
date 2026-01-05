@@ -71,11 +71,15 @@ if (app.Environment.IsDevelopment())
 	app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// Solo usar HTTPS redirection en producción
+if (!app.Environment.IsDevelopment())
+{
+	app.UseHttpsRedirection();
+}
 
 app.UseCors(builder => builder
 	.WithOrigins(
-		"https://light-roast.github.io" 
+		"https://light-roast.github.io"
 	)
 	.AllowAnyMethod()
 	.AllowAnyHeader()
